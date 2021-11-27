@@ -51,11 +51,15 @@ void loop() {
  display.flipScreenVertically();
  display.display();
  delay(15);      
- 
-t = angle();
- for( t >= 28.00 ; t = angle ;  angle <= 180 ;angle +=1)
-  myservo.write(t);
-  myservo.write(angle);
-  delay(15);
-  
+
+//servo motor funcionando 
+ if 
+  (t >= 26.00){
+    t = angle;
+    angle >= 180;
+    angle +=1;
+
+    myservo.write(t);
+    delay(10);
+  }
 }
