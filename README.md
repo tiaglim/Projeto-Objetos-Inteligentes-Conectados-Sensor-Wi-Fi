@@ -39,8 +39,8 @@ Circuito Desenvolvido CIRCUITO.IO
 
 ![image](https://user-images.githubusercontent.com/89432768/143662499-b3dc953d-5686-41b1-9c80-bab77937c755.png)
 
-O sensor utilizado no Circuito.io é o DHT22 sua diferença entre o DHTT11 é abrange uma faixa maior de temperatura e umidade
-mais dos dois sensores possuem a mesma funcionalidade.
+O sensor utilizado no Circuito.io é o DHT22 sua diferença entre o DHTT11,
+pois ele abrange uma faixa maior de temperatura e umidade.
 
 Descrição Tecnica do Projeto
 
