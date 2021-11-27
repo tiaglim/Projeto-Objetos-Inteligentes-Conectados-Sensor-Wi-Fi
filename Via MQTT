@@ -1,12 +1,19 @@
 Código MQTT
 
-#include <ESP8266WiFi.h> // Placa do Microcontrolador ESP8266 #include <PubSubClient.h> // Biblioteca do Publicador / Subscrito #include <Adafruit_Sensor.h> // Biblioteca do Sensor #include <DHT.h> #include <DHT_U.h> #include <Servo.h>
+#include <ESP8266WiFi.h>  
+#include <PubSubClient.h>  
+#include <Adafruit_Sensor.h> 
+#include <DHT.h> #include <DHT_U.h> 
+#include <Servo.h>
 
 // Sensor de Temperatura e Umidade
 
-#define DHTPIN 5 #define DHTTYPE DHT11 DHT_Unified dht(DHTPIN, DHTTYPE); uint32_t delayMS;
+#define DHTPIN 5 
+#define DHTTYPE DHT11 DHT_Unified dht(DHTPIN, DHTTYPE); uint32_t delayMS;
 
-// Atuador ServoMotor SG92R #define SERVO 0
+// Atuador ServoMotor SG92R 
+
+#define SERVO 0
 
 Servo myservo;
 
@@ -23,7 +30,9 @@ dht.begin(); Serial.println(F("Sensor DHT11")); sensor_t sensor;
 dht.temperature().getSensor(&sensor); Serial.println(F("Temperatura")); Serial.print (F("Sensor: ")); Serial.println(sensor.name); Serial.print (F("Valor máximo: ")); Serial.print(sensor.max_value); Serial.println(F("°C")); Serial.print (F("Valor mínimo: ")); Serial.print(sensor.min_value); Serial.println(F("°C")); Serial.print (F("Resolução: ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
 Serial.println(F("------------------------------------"));
 
-// -----------------Sensor de Umidade --------------------------- dht.humidity().getSensor(&sensor);
+// -----------------Sensor de Umidade --------------------------- 
+
+dht.humidity().getSensor(&sensor);
 
 Serial.println(F("Umidade")); Serial.print (F("Sensor: ")); Serial.println(sensor.name); Serial.print (F("Valor máximo: ")); Serial.print(sensor.max_value); Serial.println(F("%")); Serial.print (F("Valor mínimo: ")); Serial.print(sensor.min_value); Serial.println(F("%")); Serial.print (F("Resolução: ")); Serial.print(sensor.resolution); Serial.println(F("%")); Serial.println(F("------------------------------------"));
 
