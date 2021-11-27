@@ -1,0 +1,158 @@
+#include "Wire.h"                                       
+#include "Adafruit_GFX.h"                            
+#include "Adafruit_SSD1306.h"                          /
+#include "ESP8266WiFi.h"
+
+#include <DHT.h>
+#define DHTPIN D5
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
+Adafruit_SSD1306 display(128, 64);                    
+
+const char* ssid      = "Familia_Lima";
+const char* password  = "Deusefiel2021"; 
+int porta = 80;
+
+
+WiFiServer server(porta);                                
+
+void setup() {
+
+
+  
+      dht.begin();                                            
+      Wire.begin();                                          
+      pinMode(DHTPIN, INPUT);                              
+ 
+      display.begin(SSD1306_SWITCHCAPVCC, 0x3C);    
+      display.setTextColor(WHITE);                          
+      display.setRotation(0);                               
+      display.setTextWrap(false);   
+      display.setTextSize(1);                               
+      display.dim(0);                                         
+      display.clearDisplay();                               
+      display.drawRect(0,0,128,15,WHITE);                
+      display.setCursor(4,4);                             
+      display.print("Rede:");                               
+      display.println(ssid);                                  
+      display.display();                                      
+
+      Serial.begin(9600); 
+      Serial.print("Conectando a rede Wifi ");          
+      Serial.println(ssid);                                  
+
+      int a = 0;    
+      WiFi.begin(ssid, password);                             
+      while (WiFi.status() != WL_CONNECTED) {             
+             a = a + 1;
+             if (a < 60) {
+                 Serial.print(".");
+             } else {
+                     Serial.println(".");
+                     a = 0;
+                    }
+             delay(100);        
+      }
+
+      Serial.println("Conectado a rede");        
+      Serial.println("");                               
+      Serial.println("Servidor iniciado");              
+  
+ 
+      server.begin();                                   
+
+
+      Serial.print("IP para se conectar ao NodeMCU: "); 
+      Serial.print("http://");                          
+      Serial.println(WiFi.localIP());                   
+
+       
+      display.setCursor(0,25);
+      display.print("IP:");
+      display.print(WiFi.localIP());
+      display.print(":");
+      display.println(porta);   
+      display.display(); 
+}
+
+void loop() {
+
+      WiFiClient client = server.available();               
+      if (!client) {              
+          delay(10);
+          return;                                       
+      }    
+    
+      float h = dht.readHumidity();                 
+      float t = dht.readTemperature();              
+      float f = dht.readTemperature(true);  
+
+      Serial.println("Novo cliente se conectou!");      
+      Serial.print(" Temperatura: ");
+      Serial.print(t);        
+      Serial.print(" Umidade: ");
+      Serial.println(h);
+        
+      display.fillRect(0,40,128,64,BLACK);             
+      display.setCursor(11,42);                   
+      display.print("Temperatura:");              
+      display.setCursor(85,42);                   
+      display.print(t);                           
+    
+      display.setCursor(24,52);                   
+      display.print("Umidade:");                  
+      display.setCursor(76,52);                  
+      display.print(h);                          
+      display.display();                          
+ 
+      while(!client.available()){                       
+          delay(1);                                     
+      }  
+      
+      String request = client.readStringUntil('\r');      
+      Serial.println(request);                             
+      client.flush();                                        
+       
+      client.println("HTTP/1.1 200 OK");                
+      client.println("Content-Type: text/html");       
+      client.println("");
+      client.println("<!DOCTYPE HTML>");                
+      client.println("<html>");           
+      client.println("<HEAD>"); 
+      client.println("<TITLE>Leitura da temperatura</TITLE>"); 
+      client.println("<META http-equiv=Content-Type content='text/html; charset=iso-8859-1'>");
+      client.println("<META HTTP-EQUIV='refresh' CONTENT='5'>");
+      client.println("</HEAD>");      
+      client.println("<body>"); 
+      client.println("<h1><center>Bom-dia!</center></h1>"); 
+      client.println("<h2><center>Data e Hora</center></h2>"); 
+      client.println("<p><center id='datetime'></center></p>"); 
+      client.println("<script>");
+      client.print("var dt = new Date();");
+      client.print("document.getElementById('datetime').innerHTML = (('0'+dt.getDate()).slice(-2))+'/'+");
+      client.print("(('0'+(dt.getMonth()+1)).slice(-2))+'/'+(dt.getFullYear())+'  -  "); 
+      client.print("'+(('0'+dt.getHours()).slice(-2))+':'+(('0'+dt.getMinutes()).slice(-2));"); 
+      client.println("</script>");  
+      
+      client.println("<h2><center>Temperatura</center></h2>");      
+      client.println("<p><center>");  
+      client.println(t);
+      
+      client.println("Celsius</center></p>");
+      client.println("<p><center>");  
+      client.println(f);
+      client.println("Fahrenheit </center></p>");
+
+      client.println("<h2><center>Umidade</center></h2>");    
+      client.println("<p><center>");          
+      client.println(h);
+      client.println("</center></p>");    
+
+      client.println("</body>"); 
+      client.println("</html>"); 
+      
+      Serial.println("Cliente desconectado    ");     
+      Serial.println("");          
+      delay(20);
+}
