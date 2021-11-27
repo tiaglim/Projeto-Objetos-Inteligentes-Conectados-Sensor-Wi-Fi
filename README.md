@@ -69,7 +69,7 @@ broker utilizado: broker.mqtt-dashboard.com
 Resultado final:
 
 Todos os objetivos que foram criados e colocados em pratica no desenvolvimento do projeto;
-foi realizado testes e correção durante o desenvolvivmento do projeto, o Protocolo MQTT é 
+foi realizado testes e correção durante o desenvolvimento do projeto, o Protocolo MQTT é 
 muito util sua utilização facilita a comunicação com outros objetos, garantindo qualidade e 
 segurança.
 
