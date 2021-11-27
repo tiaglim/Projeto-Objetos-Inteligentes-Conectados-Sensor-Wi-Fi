@@ -16,7 +16,7 @@ O objetivo do projeto é a facilidade de mobilidade e utilização sendo utiliza
 
 - Controle de Temperatura.
 - Controle de Umidade. 
-- Abertura e fechamento (janela)
+- Abertura e fechamento (janela).
 
 A parte prototipo do projeto:
 
