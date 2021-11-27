@@ -15,3 +15,47 @@ void loop() { h = dht.readHumidity(); t = dht.readTemperature();
 display.clear(); display.drawRect(8, 8, 119, 53); display.setFont(ArialMT_Plain_16); display.drawString(12, 14, (String)t+" °C /Temp"); display.drawString(12, 35, (String)h+" % /Umid"); display.flipScreenVertically(); display.display();
 
 delay(50); }
+
+
+### Com o ServoMoto Funcionando 
+
+#include <SSD1306.h>
+#include "DHT.h"
+#include "Servo.h"
+ 
+SSD1306 display(0x3c,5, 4);
+DHT dht(D5, DHT11);
+int servo_pin = D6; 
+
+Servo myservo;
+int angle = 0; 
+float t; //Temperatura
+float h; // Umidade
+ 
+void setup() {
+ dht.begin();
+ display.init();
+ display.clear();
+ myservo.attach(servo_pin);
+}
+ 
+void loop() {
+ h = dht.readHumidity();
+ t = dht.readTemperature();
+ 
+ display.clear();
+ display.drawRect(8, 8, 119, 53);
+ display.setFont(ArialMT_Plain_16);
+ display.drawString(12, 14, (String)t+" °C /Temp");
+ display.drawString(12, 35, (String)h+" % /Umid");
+ display.flipScreenVertically();
+ display.display();
+ delay(15);      
+ 
+t = angle();
+ for( t >= 28.00 ; t = angle ;  angle <= 180 ;angle +=1)
+  myservo.write(t);
+  myservo.write(angle);
+  delay(15);
+  
+}
